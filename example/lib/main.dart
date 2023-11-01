@@ -25,7 +25,7 @@ class _MyAppState extends State<MyApp> {
       activityType: 'any activity',
       suggestedInvocationPhrase: 'Hel',
     );
-    _flutterSiriShortcutsPlugin = FlutterSiriShortcuts(options: options);
+    _flutterSiriShortcutsPlugin = FlutterSiriShortcuts(initOptions: options);
   }
 
   @override
