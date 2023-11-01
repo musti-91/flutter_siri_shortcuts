@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'dart:async';
 
 import 'package:flutter/services.dart';
 import 'package:flutter_siri_shortcuts/flutter_siri_shortcuts.dart';
@@ -16,35 +15,17 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  String _platformVersion = 'Unknown';
-  final _flutterSiriShortcutsPlugin = FlutterSiriShortcuts();
+  late FlutterSiriShortcuts _flutterSiriShortcutsPlugin;
 
   @override
   void initState() {
     super.initState();
-    initPlatformState();
-  }
-
-  // Platform messages are asynchronous, so we initialize in an async method.
-  Future<void> initPlatformState() async {
-    String platformVersion;
-    // Platform messages may fail, so we use a try/catch PlatformException.
-    // We also handle the message potentially returning null.
-    try {
-      platformVersion =
-          await _flutterSiriShortcutsPlugin.getPlatformVersion() ?? 'Unknown platform version';
-    } on PlatformException {
-      platformVersion = 'Failed to get platform version.';
-    }
-
-    // If the widget was removed from the tree while the asynchronous platform
-    // message was in flight, we want to discard the reply rather than calling
-    // setState to update our non-existent appearance.
-    if (!mounted) return;
-
-    setState(() {
-      _platformVersion = platformVersion;
-    });
+    final options = FlutterSiriShortcutArgs(
+      title: 'test',
+      activityType: 'any activity',
+      suggestedInvocationPhrase: 'Hel',
+    );
+    _flutterSiriShortcutsPlugin = FlutterSiriShortcuts(options: options);
   }
 
   @override
@@ -52,10 +33,63 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: const Text('Plugin example app'),
+          title: const Text('Flutter Siri shortcuts example'),
         ),
-        body: Center(
-          child: Text('Running on: $_platformVersion\n'),
+        body: Container(
+          margin: const EdgeInsets.symmetric(vertical: 20),
+          child: Column(
+            children: [
+              const SizedBox(
+                height: 100,
+              ),
+              Center(
+                child: AddToSiriButton(
+                  title: 'something',
+                  id: 'test1',
+                  url: 'https://someurl.com',
+                ),
+              ),
+              const SizedBox(
+                height: 50,
+              ),
+              ElevatedButton(
+                onPressed: () async {
+                  try {
+                    _flutterSiriShortcutsPlugin.presentShortcut();
+                  } on PlatformException {
+                    print('');
+                  }
+                },
+                child: const Text('present shortcuts example'),
+              ),
+              const SizedBox(
+                height: 50,
+              ),
+              ElevatedButton(
+                onPressed: () async {
+                  try {
+                    _flutterSiriShortcutsPlugin.donateShortcut();
+                  } on PlatformException {
+                    print('');
+                  }
+                },
+                child: const Text('donate shortcuts example'),
+              ),
+              const SizedBox(
+                height: 50,
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  try {
+                    _flutterSiriShortcutsPlugin.clearShortcuts();
+                  } on PlatformException {
+                    print('');
+                  }
+                },
+                child: const Text('clear all shortcuts example'),
+              ),
+            ],
+          ),
         ),
       ),
     );

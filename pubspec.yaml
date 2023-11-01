@@ -1,7 +1,7 @@
 name: flutter_siri_shortcuts
 description: Siri shortcuts in flutter.
 version: 0.0.1
-homepage: 
+homepage: https://github.com/musti-91/flutter_siri_shortcuts
 
 environment:
   sdk: '>=3.1.5 <4.0.0'
